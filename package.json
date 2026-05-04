@@ -1,0 +1,23 @@
+{
+  "name": "@acegalaxy/db-gateway",
+  "version": "0.1.0",
+  "description": "Cross-project DB gateway: 5-layer default-deny (postgres/sqlite/notion) with policy YAML, audit log, rate limit, identity resolution. Project-agnostic; consumers inject identity map + policy + audit sink callbacks.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "keywords": [
+    "db",
+    "gateway",
+    "postgres",
+    "sqlite",
+    "notion",
+    "ace-commons"
+  ],
+  "author": "acegalaxy.co",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}
