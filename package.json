@@ -1,5 +1,5 @@
 {
-  "name": "@acegalaxy/db-gateway",
+  "name": "@acegalaxy-co/db-gateway",
   "version": "0.1.0",
   "description": "Cross-project DB gateway: 5-layer default-deny (postgres/sqlite/notion) with policy YAML, audit log, rate limit, identity resolution. Project-agnostic; consumers inject identity map + policy + audit sink callbacks.",
   "main": "index.ts",
@@ -16,8 +16,18 @@
   ],
   "author": "acegalaxy.co",
   "license": "UNLICENSED",
-  "private": true,
+  "private": false,
   "engines": {
     "node": ">=18"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acegalaxy-co/ace_commons-db-gateway-nodejs.git"
+  },
+  "dependencies": {
+    "@acegalaxy-co/security-utils": "file:../ace_commons-security-utils-nodejs"
   }
 }
