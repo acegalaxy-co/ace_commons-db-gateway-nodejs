@@ -1,6 +1,6 @@
 "use strict";
 
-const createSlidingWindow = require("@acegalaxy-co/security-utils/rate-limit");
+const { createSlidingWindow } = require("@acegalaxy/security-utils/rate-limit");
 
 const WINDOW_MS: number = 60 * 1000;
 const MAX_REQUESTS: number = Number(process.env.DB_GATEWAY_QPS_PER_MIN || 30);
