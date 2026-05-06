@@ -1,4 +1,4 @@
-# @acegalaxy/db-gateway
+# @kanelr/db-gateway
 
 > **NPM commons library** — Cross-project DB gateway: 5-layer default-deny (postgres/sqlite/notion) with policy YAML, audit log, rate limit, identity resolution.
 > Cross-cutting rules: see framework `../../rules/00-index.md`.

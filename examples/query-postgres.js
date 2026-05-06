@@ -1,11 +1,11 @@
-// query-postgres — minimal example for @acegalaxy/db-gateway
+// query-postgres — minimal example for @kanelr/db-gateway
 //
 // Setup:
 //   npm install
 //   npm run build
 //   node examples/query-postgres.js
 
-const { query } = require("@acegalaxy/db-gateway");
+const { query } = require("@kanelr/db-gateway");
 
 (async () => {
   const rows = await query({

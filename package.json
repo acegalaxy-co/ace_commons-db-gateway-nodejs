@@ -1,5 +1,5 @@
 {
-  "name": "@acegalaxy/db-gateway",
+  "name": "@kanelr/db-gateway",
   "version": "0.1.0",
   "description": "Multi-DB adapter (Postgres + SQLite + Notion) with a 5-layer default-deny security gateway: identity, policy authz (YAML), rate-limit, append-only audit log.",
   "main": "dist/index.js",
@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/acegalaxy-co/ace_commons-db-gateway-nodejs#readme",
   "dependencies": {
-    "@acegalaxy/security-utils": "file:../ace_commons-security-utils-nodejs"
+    "@kanelr/security-utils": "file:../ace_commons-security-utils-nodejs"
   },
   "types": "dist/index.d.ts",
   "exports": {
