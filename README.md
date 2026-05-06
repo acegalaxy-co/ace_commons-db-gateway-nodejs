@@ -1,5 +1,11 @@
 # @acegalaxy/db-gateway
 
+[![npm version](https://img.shields.io/npm/v/@acegalaxy%2Fdb-gateway.svg)](https://www.npmjs.com/package/@acegalaxy/db-gateway)
+[![npm downloads](https://img.shields.io/npm/dm/@acegalaxy%2Fdb-gateway.svg)](https://www.npmjs.com/package/@acegalaxy/db-gateway)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node](https://img.shields.io/node/v/@acegalaxy%2Fdb-gateway.svg)](https://nodejs.org)
+
+
 Multi-database adapter with a 5-layer default-deny security gateway for
 PostgreSQL, SQLite, and Notion. Funnel every DB call through one entry point
 with identity, policy authz, rate-limit, and append-only audit log.
