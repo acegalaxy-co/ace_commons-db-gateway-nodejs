@@ -1,7 +1,7 @@
-# @kanelr/db-gateway
+# @acegalaxy/db-gateway
 
-[![npm version](https://img.shields.io/npm/v/@acegalaxy%2Fdb-gateway.svg)](https://www.npmjs.com/package/@kanelr/db-gateway)
-[![npm downloads](https://img.shields.io/npm/dm/@acegalaxy%2Fdb-gateway.svg)](https://www.npmjs.com/package/@kanelr/db-gateway)
+[![npm version](https://img.shields.io/npm/v/@acegalaxy%2Fdb-gateway.svg)](https://www.npmjs.com/package/@acegalaxy/db-gateway)
+[![npm downloads](https://img.shields.io/npm/dm/@acegalaxy%2Fdb-gateway.svg)](https://www.npmjs.com/package/@acegalaxy/db-gateway)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/node/v/@acegalaxy%2Fdb-gateway.svg)](https://nodejs.org)
 
@@ -25,7 +25,7 @@ The gateway never throws; it returns `{ outcome, denyReason, rows?, latencyMs }`
 ## Install
 
 ```bash
-npm install @kanelr/db-gateway
+npm install @acegalaxy/db-gateway
 ```
 
 Requires Node.js >= 20.
@@ -35,7 +35,7 @@ Requires Node.js >= 20.
 ### PostgreSQL
 
 ```js
-const { Gateway } = require('@kanelr/db-gateway');
+const { Gateway } = require('@acegalaxy/db-gateway');
 
 const gw = Gateway.create({
   adapter: 'postgres',

@@ -1,4 +1,4 @@
-# Contributing to @kanelr/db-gateway
+# Contributing to @acegalaxy/db-gateway
 
 Thanks for your interest! This package is part of the
 [ace_commons](https://github.com/acegalaxy-co) family of cross-project
