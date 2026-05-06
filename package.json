@@ -1,32 +1,37 @@
 {
-  "name": "@acegalaxy-co/db-gateway",
+  "name": "@acegalaxy/db-gateway",
   "version": "0.1.0",
-  "description": "Cross-project DB gateway: 5-layer default-deny (postgres/sqlite/notion) with policy YAML, audit log, rate limit, identity resolution. Project-agnostic; consumers inject identity map + policy + audit sink callbacks.",
+  "description": "Multi-DB adapter (Postgres + SQLite + Notion) with a 5-layer default-deny security gateway: identity, policy authz (YAML), rate-limit, append-only audit log.",
   "main": "index.ts",
   "scripts": {
     "test": "node --test test/"
   },
   "keywords": [
-    "db",
+    "database",
     "gateway",
     "postgres",
     "sqlite",
     "notion",
-    "ace-commons"
+    "authz",
+    "audit"
   ],
-  "author": "acegalaxy.co",
-  "license": "UNLICENSED",
+  "author": "ACE Galaxy <hello@acegalaxy.co>",
+  "license": "MIT",
   "private": false,
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/acegalaxy-co/ace_commons-db-gateway-nodejs.git"
   },
+  "bugs": {
+    "url": "https://github.com/acegalaxy-co/ace_commons-db-gateway-nodejs/issues"
+  },
+  "homepage": "https://github.com/acegalaxy-co/ace_commons-db-gateway-nodejs#readme",
   "dependencies": {
     "@acegalaxy-co/security-utils": "file:../ace_commons-security-utils-nodejs"
   }

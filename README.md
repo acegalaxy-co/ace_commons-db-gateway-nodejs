@@ -1,51 +1,105 @@
-# db-gateway/ — Framework reference
+# @acegalaxy/db-gateway
 
-Reference skeleton + spec cho DB Gateway. Source of truth: [rules/db/01-db-gateway-mandatory.md](../rules/db/01-db-gateway-mandatory.md) + [docs/26-04-21-15h_db-gateway-plan.md](../docs/26-04-21-15h_db-gateway-plan.md).
+Multi-database adapter with a 5-layer default-deny security gateway for
+PostgreSQL, SQLite, and Notion. Funnel every DB call through one entry point
+with identity, policy authz, rate-limit, and append-only audit log.
 
-## Status
+## Why
 
-**Phase 1 skeleton** (2026-04-21) — chưa production-ready. Pilot = nexus-one nodejs, `projects_repos/imba/ace_ace_nexus-one_nodejs/db-gateway/`.
+Ad-hoc DB calls scattered across a codebase are impossible to audit and easy to
+abuse. `db-gateway` centralizes access so every query passes the same checks:
 
-## What it is
+- **Who** is calling (identity resolution)
+- **What** they may touch (policy YAML, per-table/column)
+- **How fast** they may call (rate-limit / pool)
+- **What happened** (append-only audit log)
 
-Thin, in-project module đứng trước mọi DAL/ORM. Funnel mọi DB access qua 5 layer default-deny trước khi chạm driver (PostgreSQL, SQLite, Notion).
+The gateway never throws; it returns `{ outcome, denyReason, rows?, latencyMs }`.
 
-## 5 layers → folder map
-
-| Layer | Purpose                                      | Folder / file                                     |
-| ----- | -------------------------------------------- | ------------------------------------------------- |
-| L1    | Adapter (store-specific driver)              | `adapters/<store>.js` (postgres, sqlite, notion)  |
-| L2    | Identity (caller service name + scope)       | `identity/resolver.js`                            |
-| L3    | Schema contract + authz                      | `authz/engine.js` + `policies/*.yaml`             |
-| L4    | Rate limit + connection pool                 | `rate-limit/limiter.js`                           |
-| L5    | Audit log (append-only)                      | `audit/logger.js` → `audit/audit.log` (gitignored)|
-
-Entry: `require('./db-gateway').query(request, caller)` — returns `{ outcome, denyReason, rows?, latencyMs }`. Never throws.
-
-## Per-project independence
-
-Framework KHÔNG ship shared lib. Mỗi project tự copy skeleton này vào `<project>/db-gateway/` và customize policy YAML riêng. Duplicate code OK — đổi lấy scope isolation.
-
-## Policy YAML — single source of truth
-
-`policies/schema.yaml` khai báo table/column/type + authz. Cả Node SDK và (future) JVM SDK đọc cùng file này.
-
-## Cấm tuyệt đối
-
-Xem [rules/db/01-db-gateway-mandatory.md](../rules/db/01-db-gateway-mandatory.md). Tóm tắt:
-
-- ❌ Driver import ngoài `adapters/`.
-- ❌ Bypass identity / authz / audit log.
-- ❌ Hard DELETE trên table có soft_delete policy.
-- ❌ `notion.pages.delete()` — archive-only.
-
-## Sanity check (pre-commit)
+## Install
 
 ```bash
-grep -rn "require('pg')\|require('sqlite3')\|require('@notionhq/client')" . \
-  --include="*.js" --include="*.ts" \
-  --exclude-dir=db-gateway/adapters \
-  --exclude-dir=node_modules
+npm install @acegalaxy/db-gateway
 ```
 
-Must be empty once Phase 3 lands.
+Requires Node.js >= 20.
+
+## Quick start
+
+### PostgreSQL
+
+```js
+const { Gateway } = require('@acegalaxy/db-gateway');
+
+const gw = Gateway.create({
+  adapter: 'postgres',
+  connection: { host: 'localhost', database: 'app', user: 'app' },
+  policyPath: './policies/schema.yaml',
+  identity: (ctx) => ({ service: ctx.service, scope: ctx.scope }),
+  audit: (entry) => console.log(JSON.stringify(entry)),
+});
+
+const res = await gw.query(
+  { op: 'select', table: 'users', where: { id: 42 } },
+  { service: 'web-api', scope: 'read' },
+);
+// { outcome: 'allow', rows: [...], latencyMs: 3 }
+```
+
+### Notion
+
+```js
+const gw = Gateway.create({
+  adapter: 'notion',
+  connection: { token: process.env.NOTION_TOKEN },
+  policyPath: './policies/notion.yaml',
+  identity: (ctx) => ctx,
+  audit: writeAuditLog,
+});
+
+const res = await gw.query(
+  { op: 'page.update', pageId: 'abc...', props: { Status: 'Done' } },
+  { service: 'sync-bot', scope: 'write' },
+);
+```
+
+## Adapters
+
+| Adapter    | Driver                | Status |
+| ---------- | --------------------- | ------ |
+| `postgres` | `pg`                  | beta   |
+| `sqlite`   | `better-sqlite3`      | beta   |
+| `notion`   | `@notionhq/client`    | beta   |
+
+## Security layers
+
+```
+Caller
+  │
+  ▼
+[L2] Identity resolver       ── who is this caller?
+  │
+  ▼
+[L3] Policy authz (YAML)     ── may they touch this table/column?
+  │
+  ▼
+[L4] Rate-limit + pool       ── too many calls? back off.
+  │
+  ▼
+[L5] Audit log (append-only) ── record outcome + latency
+  │
+  ▼
+[L1] Adapter (driver call)   ── only place that imports pg / sqlite / notion
+```
+
+Default-deny: missing policy entry = `deny`. Hard `DELETE` is blocked on tables
+with `soft_delete` policy. `notion.pages.delete()` is never called — archive only.
+
+## License
+
+[MIT](./LICENSE) © 2026 ACE Galaxy
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+Security issues: see [SECURITY.md](./SECURITY.md).
