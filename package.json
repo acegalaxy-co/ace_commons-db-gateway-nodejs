@@ -4,10 +4,11 @@
   "description": "Multi-DB adapter (Postgres + SQLite + Notion) with a 5-layer default-deny security gateway: identity, policy authz (YAML), rate-limit, append-only audit log.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test test/*.test.js",
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "pretest": "npm run build"
   },
   "keywords": [
     "database",
